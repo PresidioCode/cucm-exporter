@@ -34,11 +34,11 @@ output file:
 EXAMPLE 1 - running the executable (download coming soon...)
 
 ```
-cucm-exporter -a 10.129.225.201 -o "my file.csv" -u axlusername -p axlpassword -v 11.0 -t --export users
+cucm-exporter -a 10.129.225.201 -v 11.0 -o "my file.csv" -u axlusername -p axlpassword -t --export users
 ```
 
 EXAMPLE 2 - the raw python code can be run after installing dependencies
 
 ```
-python main.py -a 10.129.225.201 -o "my file.csv" -u axlusername -p axlpassword -v 11.0 -t --export users
+python main.py -a 10.129.225.201 -v 11.0 -o "my file.csv" -u axlusername -p axlpassword -t --export users
 ```
