@@ -7,28 +7,31 @@ This tool was created in an effort to make exporting information from Cisco Unif
 This tool will be packaged as a standalone executable file that can be used with syntax as seen below:
 
 ```
-usage: main.py [-h] -a CUCM_ADDRESS [-v {11.0,11.5,12.0,12.5}] -u
-               CUCM_USERNAME -p CUCM_PASSWORD [-o FILENAME] [-t]
-               [-e {users,phones}]
+python main.py --help
+usage: main.py [-h] --address CUCM_ADDRESS [--version {11.0,11.5,12.0,12.5}]
+               --username CUCM_USERNAME --password CUCM_PASSWORD
+               [--out FILENAME] [--timestamp] [--export {users,phones}]
 
 optional arguments:
   -h, --help            show this help message and exit
 
 cucm connection:
-  -a CUCM_ADDRESS, --address CUCM_ADDRESS
+  --address CUCM_ADDRESS, -a CUCM_ADDRESS
                         specify cucm address
-  -v {11.0,11.5,12.0,12.5}, --version {11.0,11.5,12.0,12.5}
+  --version {11.0,11.5,12.0,12.5}, -v {11.0,11.5,12.0,12.5}
                         specify cucm AXL version
-  -u CUCM_USERNAME      specify ucm account username with AXL permissions
-  -p CUCM_PASSWORD      specify ucm account password
-  -e {users,phones}, --export {users,phones}
+  --username CUCM_USERNAME, -u CUCM_USERNAME
+                        specify ucm account username with AXL permissions
+  --password CUCM_PASSWORD, -p CUCM_PASSWORD
+                        specify ucm account password
+  --export {users,phones}, -e {users,phones}
                         specify what you want to export
 
 output file:
-  -o FILENAME, --out FILENAME
+  --out FILENAME, -o FILENAME
                         filename of export file (.csv format) -
-                        default="userlist.csv"
-  -t                    append filename with timestamp
+                        default="export.csv"
+  --timestamp, -t       append filename with timestamp
 ```
 
 EXAMPLE 1 - running the executable (download coming soon...)

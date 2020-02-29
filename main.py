@@ -8,41 +8,41 @@ parser = argparse.ArgumentParser()
 cucm_group = parser.add_argument_group(title='cucm connection')
 file_group = parser.add_argument_group(title='output file')
 
-cucm_group.add_argument('-a','--address', action='store',
+cucm_group.add_argument('--address','-a', action='store',
                     dest='cucm_address',
                     help='specify cucm address',
-                    required=True,)
+                    required=True)
 
-cucm_group.add_argument('-v','--version', action='store',
+cucm_group.add_argument('--version','-v', action='store',
                     dest='cucm_version',
                     choices=['11.0', '11.5', '12.0', '12.5'],
                     help='specify cucm AXL version',
                     required=False,
                     default='11.0')
 
-cucm_group.add_argument('-u', action='store',
+cucm_group.add_argument('--username','-u', action='store',
                     dest='cucm_username',
                     help='specify ucm account username with AXL permissions',
                     required=True,
                     default='CCMAdministrator')
 
-cucm_group.add_argument('-p', action='store',
+cucm_group.add_argument('--password','-p', action='store',
                     dest='cucm_password',
                     help='specify ucm account password',
                     required=True,
                     default='admin')
 
-file_group.add_argument('-o','--out', action='store',
+file_group.add_argument('--out','-o', action='store',
                     dest='filename',
-                    help='filename of export file (.csv format) - default="userlist.csv"',
+                    help='filename of export file (.csv format) - default="export.csv"',
                     required=False,
-                    default='userlist.csv')
+                    default='export.csv')
 
-file_group.add_argument('-t', action='store_true',
+file_group.add_argument('--timestamp','-t', action='store_true',
                     dest='timestamp',
                     help='append filename with timestamp')
 
-cucm_group.add_argument('-e','--export', action='store',
+cucm_group.add_argument('--export','-e', action='store',
                     dest='cucm_export',
                     choices=['users','phones'],
                     help='specify what you want to export',
