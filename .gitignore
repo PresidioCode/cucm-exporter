@@ -277,3 +277,4 @@ $RECYCLE.BIN/
 
 # project specific ignore files
 /notes.txt
+/*.csv
