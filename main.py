@@ -52,16 +52,19 @@ cucm_group.add_argument('-e','--export', action='store',
 # update variables from cli arguments
 results = parser.parse_args()
 filename = results.filename
-print(results)
+# print(results)
 
 # Update UCM details
-cucm = results.cucm_address
+cucm_address = results.cucm_address
 cucm_username = results.cucm_username
 cucm_password = results.cucm_password
 cucm_version = results.cucm_version
 
 # initialize Cisco AXL connection
-ucm = axl(username=cucm_username,password=cucm_password,cucm=cucm,cucm_version=cucm_version)
+ucm = axl(username=cucm_username,
+        password=cucm_password,
+        cucm=cucm_address,
+        cucm_version=cucm_version)
 
 def output_filename(filename):
     """
