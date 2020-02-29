@@ -42,6 +42,13 @@ file_group.add_argument('-t', action='store_true',
                     dest='timestamp',
                     help='append filename with timestamp')
 
+cucm_group.add_argument('-e','--export', action='store',
+                    dest='cucm_export',
+                    choices=['users','phones'],
+                    help='specify what you want to export',
+                    required=False,
+                    default='users')
+
 # update variables from cli arguments
 results = parser.parse_args()
 filename = results.filename
@@ -111,8 +118,11 @@ def export_users(ucm):
 
 
 def main():
-    all_users = export_users(ucm)
-    write_csv(filename=filename, all_users=all_users)
+    if results.cucm_export == 'users':
+        all_users = export_users(ucm)
+        write_csv(filename=filename, all_users=all_users)
+    else:
+        print(f"exporting {results.cucm_export} is not yet supported")
 
 if __name__ == "__main__":
     main()
