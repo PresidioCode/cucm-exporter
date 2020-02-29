@@ -9,6 +9,7 @@ This tool will be packaged as a standalone executable file that can be used with
 ```
 usage: main.py [-h] -a CUCM_ADDRESS [-v {11.0,11.5,12.0,12.5}] -u
                CUCM_USERNAME -p CUCM_PASSWORD [-o FILENAME] [-t]
+               [-e {users,phones}]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -20,6 +21,8 @@ cucm connection:
                         specify cucm AXL version
   -u CUCM_USERNAME      specify ucm account username with AXL permissions
   -p CUCM_PASSWORD      specify ucm account password
+  -e {users,phones}, --export {users,phones}
+                        specify what you want to export
 
 output file:
   -o FILENAME, --out FILENAME
@@ -31,11 +34,11 @@ output file:
 EXAMPLE 1 - running the executable (download coming soon...)
 
 ```
-cucm-exporter -a 10.129.225.201 -o "my file.csv" -u axlusername -p axlpassword -v 11.0 -t
+cucm-exporter -a 10.129.225.201 -o "my file.csv" -u axlusername -p axlpassword -v 11.0 -t --export users
 ```
 
 EXAMPLE 2 - the raw python code can be run after installing dependencies
 
 ```
-python main.py -a 10.129.225.201 -o "my file.csv" -u axlusername -p axlpassword -v 11.0 -t
+python main.py -a 10.129.225.201 -o "my file.csv" -u axlusername -p axlpassword -v 11.0 -t --export users
 ```
