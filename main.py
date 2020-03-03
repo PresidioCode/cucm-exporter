@@ -3,6 +3,7 @@ from datetime import datetime
 from ciscoaxl import axl
 import argparse
 
+
 # initialize the CLI parser
 parser = argparse.ArgumentParser()
 cucm_group = parser.add_argument_group(title='cucm connection')
@@ -54,7 +55,7 @@ results = parser.parse_args()
 filename = results.filename
 # print(results)
 
-# Update UCM details
+# store the UCM details
 cucm_address = results.cucm_address
 cucm_username = results.cucm_username
 cucm_password = results.cucm_password

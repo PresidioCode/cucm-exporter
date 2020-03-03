@@ -278,3 +278,5 @@ $RECYCLE.BIN/
 # project specific ignore files
 /notes.txt
 /*.csv
+/.vscode
+/.venv
