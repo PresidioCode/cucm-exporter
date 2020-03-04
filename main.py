@@ -3,6 +3,8 @@ from datetime import datetime
 from ciscoaxl import axl
 import argparse
 
+start_time = datetime.now()
+print(f"status: starting {start_time}")
 
 # initialize the CLI parser
 parser = argparse.ArgumentParser()
@@ -25,7 +27,7 @@ cucm_group.add_argument('--username','-u', action='store',
                     dest='cucm_username',
                     help='specify ucm account username with AXL permissions',
                     required=True,
-                    default='CCMAdministrator')
+                    default='Administrator')
 
 cucm_group.add_argument('--password','-p', action='store',
                     dest='cucm_password',
@@ -88,7 +90,7 @@ def write_csv(filename, all_users):
     filename = output_filename(filename)
 
     with open(filename, 'w', newline='') as csvfile:
-        fieldnames = ['username','firstname', 'lastname','displayname','primary_extension', 'telephone_number','directory_uri']
+        fieldnames = [key for key in all_users[-1].keys()]
         
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
@@ -100,21 +102,30 @@ def export_users(ucm):
     """
     retrieve users from ucm
     """
-    user_list = ucm.get_users()
+    user_list = ucm.get_users(tagfilter={
+                        'userid': '',
+                        'firstName': '',
+                        'lastName': '',
+                        'directoryUri': '',
+                        'telephoneNumber': '',
+                        'enableCti': '',
+                        'mailid': '',
+                        'primaryExtension': {'pattern': ''}
+                    })
     all_users = []
 
     for user in user_list:
         user_dict = dict()
-        user_dict["username"] = user.userid
-        user_dict["firstname"] = user.firstName
-        user_dict["lastname"] = user.lastName
-        user_dict["displayname"] = user.displayName
-        user_dict["primary_extension"] = user.primaryExtension.pattern
-        user_dict["telephone_number"] = user.telephoneNumber
-        user_dict["directory_uri"] = user.directoryUri
-
+        user_dict["userid"] = user.userid
+        user_dict["firstName"] = user.firstName
+        user_dict["lastName"] = user.lastName
+        user_dict["telephoneNumber"] = user.telephoneNumber
+        user_dict["primaryExtension"] = user.primaryExtension.pattern
+        user_dict["directoryUri"] = user.directoryUri
+        user_dict["mailid"] = user.mailid
+        
         all_users.append(user_dict)
-        print(f"{user_dict.get('username')} -- {user_dict.get('firstname')} {user_dict.get('lastname')}:  {user_dict.get('primary_extension')}")
+        print(f"{user_dict.get('userid')} -- {user_dict.get('firstName')} {user_dict.get('lastName')}:  {user_dict.get('primaryExtension')}")
 
     print("-" * 35)
     print(f"number of users: {len(all_users)}")
@@ -125,6 +136,11 @@ def main():
     if results.cucm_export == 'users':
         all_users = export_users(ucm)
         write_csv(filename=filename, all_users=all_users)
+        print(f"status: elapsed time -- {datetime.now() - start_time}")
+    elif results.cucm_export == 'phones':
+        all_phones = export_phones(ucm)
+        write_csv(filename=filename, all_users=all_phones)
+        print(f"status: elapsed time -- {datetime.now() - start_time}")
     else:
         print(f"exporting {results.cucm_export} is not yet supported")
 
