@@ -18,7 +18,7 @@ cucm_group.add_argument('--address','-a', action='store',
 
 cucm_group.add_argument('--version','-v', action='store',
                     dest='cucm_version',
-                    choices=['11.0', '11.5', '12.0', '12.5'],
+                    choices=['8.0', '10.0', '10.5', '11.0', '11.5', '12.0', '12.5'],
                     help='specify cucm AXL version',
                     required=False,
                     default='11.0')
