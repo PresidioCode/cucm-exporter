@@ -1,4 +1,4 @@
-import sys, csv
+import csv
 from datetime import datetime
 from ciscoaxl import axl
 import argparse
