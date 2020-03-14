@@ -2,6 +2,7 @@ import sys, csv
 from datetime import datetime
 from ciscoaxl import axl
 import argparse
+from email_util import send_email
 
 start_time = datetime.now()
 print(f"status: starting {start_time}")
@@ -10,6 +11,7 @@ print(f"status: starting {start_time}")
 parser = argparse.ArgumentParser()
 cucm_group = parser.add_argument_group(title='cucm connection')
 file_group = parser.add_argument_group(title='output file')
+email_group = parser.add_argument_group(title='email options')
 
 cucm_group.add_argument('--address','-a', action='store',
                     dest='cucm_address',
@@ -52,16 +54,26 @@ cucm_group.add_argument('--export','-e', action='store',
                     required=False,
                     default='users')
 
+email_group.add_argument('--smtpserver','-s', action='store',
+                    dest='smtpserver',
+                    required=False,
+                    help='smtp server name or ip address')
+
+email_group.add_argument('--mailto','-m', action='store',
+                    dest='mailto',
+                    required=False,
+                    help='send output to mail recipient')
+
 # update variables from cli arguments
-results = parser.parse_args()
-filename = results.filename
-# print(results)
+cli_args = parser.parse_args()
+filename = cli_args.filename
+# print(cli_args)
 
 # store the UCM details
-cucm_address = results.cucm_address
-cucm_username = results.cucm_username
-cucm_password = results.cucm_password
-cucm_version = results.cucm_version
+cucm_address = cli_args.cucm_address
+cucm_username = cli_args.cucm_username
+cucm_password = cli_args.cucm_password
+cucm_version = cli_args.cucm_version
 
 # initialize Cisco AXL connection
 ucm = axl(username=cucm_username,
@@ -73,7 +85,7 @@ def output_filename(filename):
     """
     Construct the output filename
     """
-    if results.timestamp:
+    if cli_args.timestamp:
         date_time = datetime.now().strftime("%m-%d-%Y_%H.%M.%S")
         lname = filename.split(".")[0]
         rname = filename.split(".")[-1]
@@ -87,7 +99,6 @@ def write_csv(filename, all_users):
     """
     write output to csv file
     """
-    filename = output_filename(filename)
 
     with open(filename, 'w', newline='') as csvfile:
         fieldnames = [key for key in all_users[-1].keys()]
@@ -133,16 +144,31 @@ def export_users(ucm):
 
 
 def main():
-    if results.cucm_export == 'users':
+    date_time = datetime.now().strftime("%m-%d-%Y_%H.%M.%S")
+
+    if cli_args.cucm_export == 'users':
         all_users = export_users(ucm)
+        filename = output_filename(cli_args.filename)
         write_csv(filename=filename, all_users=all_users)
         print(f"status: elapsed time -- {datetime.now() - start_time}")
-    elif results.cucm_export == 'phones':
+    elif cli_args.cucm_export == 'phones':
         all_phones = export_phones(ucm)
+        filename = output_filename(cli_args.filename)
         write_csv(filename=filename, all_users=all_phones)
         print(f"status: elapsed time -- {datetime.now() - start_time}")
     else:
-        print(f"exporting {results.cucm_export} is not yet supported")
+        print(f"exporting {cli_args.cucm_export} is not yet supported")
+        return
+
+    # send email if selected    
+    if cli_args.mailto and cli_args.smtpserver:
+        response = send_email(smtp_server=cli_args.smtpserver, send_to_email=cli_args.mailto, fileToSend=filename)
+        print(f"status: mail sent to {cli_args.mailto} via {cli_args.smtpserver} at {date_time}")
+    elif cli_args.mailto and not cli_args.smtpserver:
+        print(f"status: mail unable to send.  no smtp server was defined")
+    elif cli_args.smtpserver and not cli_args.mailto:
+        print(f"status: mail unable to send.  no mailto address was defined")
+        
 
 if __name__ == "__main__":
     main()

@@ -5,6 +5,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 import os, pathlib
+from datetime import datetime
+
 
 
 template_folder = pathlib.Path().cwd() / 'TEMPLATE'
@@ -13,6 +15,8 @@ def send_email(smtp_server="", send_to_email="", fileToSend='export.csv'):
     """
     Send Email Notification
     """
+    date_time = datetime.now().strftime("%m-%d-%Y_%H.%M.%S")
+
     from_email = "noreply@presidio.com"
     subject = 'cucm-exporter job has completed'
     
@@ -22,10 +26,10 @@ def send_email(smtp_server="", send_to_email="", fileToSend='export.csv'):
     msg['Subject'] = subject
 
     with open(template_folder / "email-template.html", 'r') as myfile:
-        messageHTML = myfile.read().replace('\n', '')
+        messageHTML = myfile.read().replace('\n', '').replace(r'{date_time}', date_time)
 
     messagePlain = f'''
-        cucm-exporter has completed a job...
+        cucm-exporter has completed a job at {date_time}...
 
         Regards,
         The cucm admin team
