@@ -135,18 +135,18 @@ def output_filename(filename):
     return new_filename
 
 
-def write_csv(filename, all_users):
+def write_csv(filename, data):
     """
     write output to csv file
     """
 
     with open(filename, "w", newline="") as csvfile:
-        fieldnames = [key for key in all_users[-1].keys()]
+        fieldnames = [key for key in data[-1].keys()]
 
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-        for user in all_users:
-            writer.writerow(user)
+        for row in data:
+            writer.writerow(row)
 
 
 def export_users(ucm):
@@ -185,6 +185,13 @@ def export_users(ucm):
     print("-" * 35)
     print(f"number of users: {len(all_users)}")
     return all_users
+
+
+def export_phones():
+    """
+    export phone details
+    """
+    phone_list = ucm.get_phones(tagfilter={"userid": "",})
 
 
 def main():
