@@ -1,4 +1,4 @@
-import csv
+import csv, json
 from datetime import datetime
 from ciscoaxl import axl
 import argparse
@@ -162,28 +162,46 @@ def export_users(ucm):
             "telephoneNumber": "",
             "enableCti": "",
             "mailid": "",
-            "primaryExtension": {"pattern": ""},
+            "primaryExtension": {"pattern": "", "routePartitionName": ""},
+            "enableMobility": "",
+            "homeCluster": "",
+            "associatedPc": "",
+            "enableEmcc": "",
+            "imAndPresenceEnable": "",
+            "serviceProfile": {"_value_1": ""},
+            "status": "",
+            "userLocale": "",
+            "title": "",
+            "subscribeCallingSearchSpaceName": "",
+            "ldapDirectoryName": "",
+            "accountType": "",
+            "authenticationType": "",
+            "enableUserToHostConferenceNow": "",
+            "attendeesAccessCode": "",
         }
     )
     all_users = []
 
     for user in user_list:
-        user_dict = dict()
-        user_dict["userid"] = user.userid
-        user_dict["firstName"] = user.firstName
-        user_dict["lastName"] = user.lastName
-        user_dict["telephoneNumber"] = user.telephoneNumber
-        user_dict["primaryExtension"] = user.primaryExtension.pattern
-        user_dict["directoryUri"] = user.directoryUri
-        user_dict["mailid"] = user.mailid
+        user_details = {
+            "userid": user.userid,
+            "firstName": user.firstName,
+            "lastName": user.lastName,
+            "telephoneNumber": user.telephoneNumber,
+            "primaryExtension": user.primaryExtension.pattern,
+            "directoryUri": user.directoryUri,
+            "mailid": user.mailid,
+        }
 
-        all_users.append(user_dict)
+        all_users.append(user_details)
         print(
-            f"{user_dict.get('userid')} -- {user_dict.get('firstName')} {user_dict.get('lastName')}:  {user_dict.get('primaryExtension')}"
+            f"{user_details.get('userid')} -- {user_details.get('firstName')} {user_details.get('lastName')}:  {user_details.get('primaryExtension')}"
         )
 
     print("-" * 35)
     print(f"number of users: {len(all_users)}")
+    # print(user_list)
+    # print(json.dumps(all_users, indent=2))
     return all_users
 
 
