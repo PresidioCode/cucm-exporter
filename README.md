@@ -46,8 +46,8 @@ EXAMPLE 1 - running the executable
 cucm-exporter -a 10.129.225.201 -v 11.0 -o "my file.csv" -u axlusername -p axlpassword -t --export users
 ```
 
-EXAMPLE 2 - the raw python code can be run after installing dependencies
+EXAMPLE 2 - the raw python code can be run from source after installing dependencies `pip install -r requirements.txt`
 
 ```
-python main.py -a 10.129.225.201 -v 11.0 -o "my file.csv" -u axlusername -p axlpassword -t --export users
+python cucm-exporter.py -a 10.129.225.201 -v 11.0 -o "my file.csv" -u axlusername -p axlpassword -t --export users
 ```
