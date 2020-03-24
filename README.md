@@ -7,10 +7,10 @@ This tool was created in an effort to make exporting information from Cisco Unif
 This tool will be packaged as a standalone executable file that can be used with syntax as seen below:
 
 ```
-python main.py --help
-usage: main.py [-h] --address CUCM_ADDRESS [--version {11.0,11.5,12.0,12.5}]
-               --username CUCM_USERNAME --password CUCM_PASSWORD
-               [--out FILENAME] [--timestamp] [--export {users,phones}]
+cucm-exporter --help                                                                                                  status: starting 2020-03-23 20:07:33.256787
+usage: cucm-exporter.exe [-h] --address CUCM_ADDRESS [--version {8.0,10.0,10.5,11.0,11.5,12.0,12.5}] --username
+                         CUCM_USERNAME --password CUCM_PASSWORD [--out FILENAME] [--timestamp]
+                         [--export {users,phones}] [--smtpserver SMTPSERVER] [--mailto MAILTO]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -18,7 +18,7 @@ optional arguments:
 cucm connection:
   --address CUCM_ADDRESS, -a CUCM_ADDRESS
                         specify cucm address
-  --version {11.0,11.5,12.0,12.5}, -v {11.0,11.5,12.0,12.5}
+  --version {8.0,10.0,10.5,11.0,11.5,12.0,12.5}, -v {8.0,10.0,10.5,11.0,11.5,12.0,12.5}
                         specify cucm AXL version
   --username CUCM_USERNAME, -u CUCM_USERNAME
                         specify ucm account username with AXL permissions
@@ -29,9 +29,15 @@ cucm connection:
 
 output file:
   --out FILENAME, -o FILENAME
-                        filename of export file (.csv format) -
-                        default="export.csv"
+                        filename of export file (.csv format) - default="export.csv"
   --timestamp, -t       append filename with timestamp
+
+email options:
+  --smtpserver SMTPSERVER, -s SMTPSERVER
+                        smtp server name or ip address
+  --mailto MAILTO, -m MAILTO
+                        send output to mail recipient
+
 ```
 
 EXAMPLE 1 - running the executable (download coming soon...)
