@@ -40,7 +40,7 @@ email options:
 
 ```
 
-EXAMPLE 1 - running the executable (download coming soon...)
+EXAMPLE 1 - running the executable
 
 ```
 cucm-exporter -a 10.129.225.201 -v 11.0 -o "my file.csv" -u axlusername -p axlpassword -t --export users
