@@ -2,8 +2,7 @@
 
 This tool was created in an effort to make exporting information from Cisco Unified Communications Manager (CUCM) easy. Some example use cases might include regularly exporting a user and phone number list to csv on a recurring schedule.
 
-- download [cucm-exporter.exe](/cucm-exporter/releases/latest) for windows
-- download `cucm-exporter` for mac (coming soon)
+- download [latest release](https://github.com/bradh11/cucm-exporter/releases/latest)
 
 ## Usage
 
