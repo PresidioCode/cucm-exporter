@@ -16,33 +16,41 @@ if len(sys.argv) >= 2:
         sys.argv.append("--ignore-gooey")
 
 
-def output_filename(cli_args):
+def output_filename(filename, results):
     """
     Construct the output filename
     """
-    if cli_args.timestamp:
+    if results.timestamp:
         date_time = datetime.now().strftime("%m-%d-%Y_%H.%M.%S")
-        lname = cli_args.filename.split(".")[0]
-        rname = cli_args.filename.split(".")[-1]
+        lname = filename.split(".")[0]
+        rname = filename.split(".")[-1]
         new_filename = f"{lname}_{date_time}.{rname}"
     else:
-        new_filename = cli_args.filename
+        new_filename = filename
 
     return new_filename
 
 
-def write_csv(filename, data):
+def write_csv(filename, results, content):
     """
     write output to csv file
     """
-
+    filename = output_filename(filename, results)
     with open(filename, "w", newline="") as csvfile:
-        fieldnames = [key for key in data[-1].keys()]
+        fieldnames = [key for key in content[-1].keys()]
 
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-        for row in data:
-            writer.writerow(row)
+        for each in content:
+            writer.writerow(each)
+
+
+def process_results(output):
+    if len(output) > 0:
+        write_csv(filename=filename, results=results, content=output)
+    else:
+        print("no users found!")
+    print(f"status: elapsed time -- {datetime.now() - start_time}")
 
 
 @Gooey(
@@ -143,7 +151,7 @@ def main():
         "-e",
         action="store",
         dest="cucm_export",
-        choices=["users", "phones"],
+        choices=["users", "phones", "translations", "sip-trunks", "registered-phones"],
         help="specify what you want to export",
         required=False,
         default="users",
@@ -179,7 +187,7 @@ def main():
     cucm_version = cli_args.cucm_version
 
     # initialize Cisco AXL connection
-    ucm = axl(
+    ucm_axl = axl(
         username=cucm_username,
         password=cucm_password,
         cucm=cucm_address,
@@ -193,14 +201,25 @@ def main():
     )
 
     if cli_args.cucm_export == "users":
-        all_users = cucm.export_users(ucm)
-        filename = output_filename(cli_args)
-        write_csv(filename=filename, data=all_users)
+        output = cucm.export_users(ucm_axl)
+        if len(output) > 0:
+            write_csv(filename=filename, results=cli_args, content=output)
+        else:
+            print(f"status: no {cli_args.cucm_export} found...")
         print(f"status: elapsed time -- {datetime.now() - start_time}\n")
     elif cli_args.cucm_export == "phones":
-        all_phones = cucm.export_phones(ucm)
-        filename = output_filename(cli_args)
-        write_csv(filename=filename, data=all_phones)
+        output = cucm.export_phones(ucm_axl)
+        if len(output) > 0:
+            write_csv(filename=filename, results=cli_args, content=output)
+        else:
+            print(f"status: no {cli_args.cucm_export} found...")
+        print(f"status: elapsed time -- {datetime.now() - start_time}\n")
+    elif cli_args.cucm_export == "translations":
+        output = cucm.export_translations(ucm_axl)
+        if len(output) > 0:
+            write_csv(filename=filename, results=cli_args, content=output)
+        else:
+            print(f"status: no {cli_args.cucm_export} found...")
         print(f"status: elapsed time -- {datetime.now() - start_time}\n")
     else:
         print(f"exporting {cli_args.cucm_export} is not yet supported")
