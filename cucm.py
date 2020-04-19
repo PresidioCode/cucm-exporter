@@ -165,7 +165,7 @@ def export_siptrunks(ucm_axl):
     try:
         all_sip_trunks = []
         sip_trunks = ucm_axl.get_sip_trunks(
-            tagFilter={
+            tagfilter={
                 "name": "",
                 "description": "",
                 "callingSearchSpaceName": "",
