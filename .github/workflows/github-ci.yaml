@@ -7,7 +7,7 @@ jobs:
     runs-on: ${{ matrix.platform }}
     strategy:
       matrix:
-        python-version: [3.7, 3.8]
+        python-version: [3.8]
         platform: [macos-latest, windows-latest]
     steps:
       - uses: actions/checkout@v2
