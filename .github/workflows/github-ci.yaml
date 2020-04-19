@@ -38,7 +38,7 @@ jobs:
         run: python -m PyInstaller -F cucm-exporter.spec
 
   bump_version:
-    needs: tests
+    needs: build
     runs-on: ${{ matrix.platform }}
     strategy:
       matrix:
