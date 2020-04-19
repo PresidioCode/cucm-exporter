@@ -1,4 +1,5 @@
 import csv, json, sys
+from pathlib import Path
 from datetime import datetime
 from ciscoaxl import axl
 from ciscoris import ris
@@ -6,6 +7,9 @@ import argparse
 from email_util import send_email
 from gooey import Gooey, GooeyParser
 import cucm
+
+BASE_DIR = Path(__file__).resolve().parent
+IMG_DIR = BASE_DIR.joinpath("img")
 
 start_time = datetime.now()
 print(f"status: starting {start_time}")
@@ -63,7 +67,7 @@ def write_csv(filename, results, content):
             ],
         },
     ],
-    image_dir="img",
+    # image_dir=IMG_DIR,
     tabbed_groups=True,
 )
 def main():
@@ -208,6 +212,13 @@ def main():
         print(f"status: elapsed time -- {datetime.now() - start_time}\n")
     elif cli_args.cucm_export == "translations":
         output = cucm.export_translations(ucm_axl)
+        if len(output) > 0:
+            write_csv(filename=filename, results=cli_args, content=output)
+        else:
+            print(f"status: no {cli_args.cucm_export} found...")
+        print(f"status: elapsed time -- {datetime.now() - start_time}\n")
+    elif cli_args.cucm_export == "sip-trunks":
+        output = cucm.export_siptrunks(ucm_axl)
         if len(output) > 0:
             write_csv(filename=filename, results=cli_args, content=output)
         else:
