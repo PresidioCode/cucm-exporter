@@ -231,10 +231,11 @@ def export_translations(ucm_axl):
         all_translations = []
         translations = ucm_axl.get_translations()
         for translation in translations:
+            # print(translation)
             xlate = {}
             xlate["pattern"] = translation.pattern
-            xlate["description"] = translation.description
             xlate["routePartition"] = translation.routePartitionName._value_1
+            xlate["description"] = translation.description
             xlate["callingSearchSpace"] = translation.callingSearchSpaceName._value_1
             xlate[
                 "calledPartyTransformationMask"
@@ -242,7 +243,16 @@ def export_translations(ucm_axl):
             xlate[
                 "callingPartyTransformationMask"
             ] = translation.callingPartyTransformationMask
+            xlate[
+                "digitDiscardInstructionName"
+            ] = translation.digitDiscardInstructionName._value_1
+            xlate["prefixDigitsOut"] = translation.prefixDigitsOut
             all_translations.append(xlate)
+            print(
+                f"exporting: {xlate['pattern']}: {xlate['routePartition']} - {xlate['description']} --> {xlate['calledPartyTransformationMask']}"
+            )
+        print("-" * 35)
+        print(f"number of translations: {len(all_translations)}")
         return all_translations
     except Exception as e:
         return []
