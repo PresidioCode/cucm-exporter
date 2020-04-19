@@ -45,14 +45,6 @@ def write_csv(filename, results, content):
             writer.writerow(each)
 
 
-def process_results(output):
-    if len(output) > 0:
-        write_csv(filename=filename, results=results, content=output)
-    else:
-        print("no users found!")
-    print(f"status: elapsed time -- {datetime.now() - start_time}")
-
-
 @Gooey(
     program_name="CUCM Extraction Tool",
     program_description="Cisco Unified Communications Manager Tool",
