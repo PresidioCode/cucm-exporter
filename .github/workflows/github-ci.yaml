@@ -42,6 +42,9 @@ jobs:
       matrix:
         platform: [ubuntu-latest]
     steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: "0"
       - name: Github Tag Bump
         uses: anothrNick/github-tag-action@1.19.0
         env:
