@@ -1,3 +1,5 @@
+import time
+
 # functions for cucm export
 def export_users(ucm_axl):
     """
