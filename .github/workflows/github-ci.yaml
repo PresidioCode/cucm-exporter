@@ -35,7 +35,7 @@ jobs:
           python cucm-exporter.py -a ${{ secrets.CUCM_SERVER }} --export translations -o export_file.csv -u ${{ secrets.CUCM_USER }} -p ${{ secrets.CUCM_PASSWORD }} --version ${{ secrets.CUCM_VERSION }}
           python cucm-exporter.py -a ${{ secrets.CUCM_SERVER }} --export sip-trunks -o export_file.csv -u ${{ secrets.CUCM_USER }} -p ${{ secrets.CUCM_PASSWORD }} --version ${{ secrets.CUCM_VERSION }}
       - name: Build Binary executables
-        - run: python -m PyInstaller -F cucm-exporter.spec
+        run: python -m PyInstaller -F cucm-exporter.spec
         - uses: actions/upload-artifact@v1
           with:
             name: cucm-exporter-executable
