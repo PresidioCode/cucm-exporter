@@ -3,13 +3,12 @@ name: cucm-exporter ci
 on: [push]
 
 jobs:
-  tests:
+  build:
     runs-on: ${{ matrix.platform }}
     strategy:
       matrix:
         python-version: [3.7, 3.8]
         platform: [macos-latest, windows-latest]
-
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -34,6 +33,8 @@ jobs:
           python cucm-exporter.py -a ${{ secrets.CUCM_SERVER }} --export phones -o export_file.csv -u ${{ secrets.CUCM_USER }} -p ${{ secrets.CUCM_PASSWORD }} --version ${{ secrets.CUCM_VERSION }}
           python cucm-exporter.py -a ${{ secrets.CUCM_SERVER }} --export translations -o export_file.csv -u ${{ secrets.CUCM_USER }} -p ${{ secrets.CUCM_PASSWORD }} --version ${{ secrets.CUCM_VERSION }}
           python cucm-exporter.py -a ${{ secrets.CUCM_SERVER }} --export sip-trunks -o export_file.csv -u ${{ secrets.CUCM_USER }} -p ${{ secrets.CUCM_PASSWORD }} --version ${{ secrets.CUCM_VERSION }}
+      - name: Build Binary executables
+        run: python -m PyInstaller -F cucm-exporter.spec
 
   bump_version:
     needs: tests
