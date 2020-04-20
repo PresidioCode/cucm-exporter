@@ -26,11 +26,6 @@ def export_users(ucm_axl):
                 "userLocale": "",
                 "title": "",
                 "subscribeCallingSearchSpaceName": "",
-                "ldapDirectoryName": "",
-                "accountType": "",
-                "authenticationType": "",
-                "enableUserToHostConferenceNow": "",
-                "attendeesAccessCode": "",
             }
         )
         all_users = []
@@ -58,6 +53,7 @@ def export_users(ucm_axl):
         # print(json.dumps(all_users, indent=2))
         return all_users
     except Exception as e:
+        print(e)
         return []
 
 
@@ -158,6 +154,7 @@ def export_phones(ucm_axl):
         print(f"number of phones: {len(all_phones)}")
         return all_phones
     except Exception as e:
+        print(e)
         return []
 
 
