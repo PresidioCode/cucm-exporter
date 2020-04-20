@@ -168,22 +168,32 @@ def export_siptrunks(ucm_axl):
             tagfilter={
                 "name": "",
                 "description": "",
+                "devicePoolName": "",
                 "callingSearchSpaceName": "",
                 "sipProfileName": "",
                 "mtpRequired": "",
                 "sigDigits": "",
+                "destAddrIsSrv": "",
             }
         )
         for siptrunk in sip_trunks:
             trunk = {}
             trunk["name"] = siptrunk.name
-            trunk["sipProfileName"] = siptrunk.sipProfileName
-            trunk["callingSearchSpace"] = siptrunk.callingSearchSpaceName
+            trunk["description"] = siptrunk.description
+            trunk["devicePoolName"] = siptrunk.devicePoolName._value_1
+            trunk["sipProfileName"] = siptrunk.sipProfileName._value_1
+            trunk["callingSearchSpace"] = siptrunk.callingSearchSpaceName._value_1
             trunk["mtpRequired"] = siptrunk.mtpRequired
-            trunk["sigDigits"] = siptrunk.sigDigits
+            trunk["sigDigits"] = siptrunk.sigDigits._value_1
             all_sip_trunks.append(trunk)
+            # print(siptrunk)
+            print(f"exporting: {siptrunk.name}: {siptrunk.description}")
+
+        print("-" * 35)
+        print(f"number of siptrunks: {len(all_sip_trunks)}")
         return all_sip_trunks
     except Exception as e:
+        print(e)
         return []
 
 
