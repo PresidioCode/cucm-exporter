@@ -1,4 +1,6 @@
-import csv, json, sys
+import csv
+import json
+import sys
 from pathlib import Path
 from datetime import datetime
 from ciscoaxl import axl
@@ -20,11 +22,11 @@ if len(sys.argv) >= 2:
         sys.argv.append("--ignore-gooey")
 
 
-def output_filename(filename, results):
+def output_filename(filename, cli_args):
     """
     Construct the output filename
     """
-    if results.timestamp:
+    if cli_args.timestamp:
         date_time = datetime.now().strftime("%m-%d-%Y_%H.%M.%S")
         lname = filename.split(".")[0]
         rname = filename.split(".")[-1]
@@ -35,11 +37,11 @@ def output_filename(filename, results):
     return new_filename
 
 
-def write_csv(filename, results, content):
+def write_csv(filename, cli_args, content):
     """
     write output to csv file
     """
-    filename = output_filename(filename, results)
+    filename = output_filename(filename, cli_args)
     with open(filename, "w", newline="") as csvfile:
         fieldnames = [key for key in content[-1].keys()]
 
@@ -74,7 +76,8 @@ def main():
     date_time = datetime.now().strftime("%m-%d-%Y_%H.%M.%S")
 
     # initialize the CLI parser
-    parser = GooeyParser(description="Cisco Unified Communications Manager Tool")
+    parser = GooeyParser(
+        description="Cisco Unified Communications Manager Tool")
     cucm_group = parser.add_argument_group(title="cucm connection")
     file_group = parser.add_argument_group(title="output file")
     email_group = parser.add_argument_group(
@@ -147,7 +150,8 @@ def main():
         "-e",
         action="store",
         dest="cucm_export",
-        choices=["users", "phones", "translations", "sip-trunks", "registered-phones"],
+        choices=["users", "phones", "translations",
+                 "sip-trunks", "registered-phones"],
         help="specify what you want to export",
         required=False,
         default="users",
@@ -199,28 +203,28 @@ def main():
     if cli_args.cucm_export == "users":
         output = cucm.export_users(ucm_axl)
         if len(output) > 0:
-            write_csv(filename=filename, results=cli_args, content=output)
+            write_csv(filename=filename, cli_args=cli_args, content=output)
         else:
             print(f"status: no {cli_args.cucm_export} found...")
         print(f"status: elapsed time -- {datetime.now() - start_time}\n")
     elif cli_args.cucm_export == "phones":
         output = cucm.export_phones(ucm_axl)
         if len(output) > 0:
-            write_csv(filename=filename, results=cli_args, content=output)
+            write_csv(filename=filename, cli_args=cli_args, content=output)
         else:
             print(f"status: no {cli_args.cucm_export} found...")
         print(f"status: elapsed time -- {datetime.now() - start_time}\n")
     elif cli_args.cucm_export == "translations":
         output = cucm.export_translations(ucm_axl)
         if len(output) > 0:
-            write_csv(filename=filename, results=cli_args, content=output)
+            write_csv(filename=filename, cli_args=cli_args, content=output)
         else:
             print(f"status: no {cli_args.cucm_export} found...")
         print(f"status: elapsed time -- {datetime.now() - start_time}\n")
     elif cli_args.cucm_export == "sip-trunks":
         output = cucm.export_siptrunks(ucm_axl)
         if len(output) > 0:
-            write_csv(filename=filename, results=cli_args, content=output)
+            write_csv(filename=filename, cli_args=cli_args, content=output)
         else:
             print(f"status: no {cli_args.cucm_export} found...")
         print(f"status: elapsed time -- {datetime.now() - start_time}\n")
