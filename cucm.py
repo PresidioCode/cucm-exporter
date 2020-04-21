@@ -1,6 +1,6 @@
 import time
 
-# functions for cucm export
+
 def export_users(ucm_axl):
     """
     retrieve users from ucm
@@ -32,15 +32,14 @@ def export_users(ucm_axl):
 
         for user in user_list:
             # print(user)
-            user_details = {
-                "userid": user.userid,
-                "firstName": user.firstName,
-                "lastName": user.lastName,
-                "telephoneNumber": user.telephoneNumber,
-                "primaryExtension": user.primaryExtension.pattern,
-                "directoryUri": user.directoryUri,
-                "mailid": user.mailid,
-            }
+            user_details = {}
+            user_details['userid'] = user.userid
+            user_details['firstName'] = user.firstName
+            user_details['lastName'] = user.lastName
+            user_details['telephoneNumber'] = user.telephoneNumber
+            user_details['primaryExtension'] = user.primaryExtension.pattern
+            user_details['directoryUri'] = user.directoryUri
+            user_details['mailid'] = user.mailid
 
             all_users.append(user_details)
             print(
@@ -148,7 +147,8 @@ def export_phones(ucm_axl):
             }
             all_phones.append(phone_details)
 
-            print(f"exporting: {phone.name}: {phone.model} - {phone.description}")
+            print(
+                f"exporting: {phone.name}: {phone.model} - {phone.description}")
 
         print("-" * 35)
         print(f"number of phones: {len(all_phones)}")
@@ -182,6 +182,15 @@ def export_siptrunks(ucm_axl):
             trunk["callingSearchSpace"] = siptrunk.callingSearchSpaceName._value_1
             trunk["mtpRequired"] = siptrunk.mtpRequired
             trunk["sigDigits"] = siptrunk.sigDigits._value_1
+            # TODO: get_siptrunk details for destinations
+            trunk_details = ucm_axl.get_sip_trunk(name=siptrunk.name)
+            destinations = trunk_details['return']['sipTrunk']['destinations']['destination']
+            # print(destinations)
+            for count, destination in enumerate(destinations):
+                trunk[f'addressIpv4_{count}'] = destination.addressIpv4
+                trunk[f'port_{count}'] = destination.port
+                trunk[f'sortOrder_{count}'] = destination.sortOrder
+
             all_sip_trunks.append(trunk)
             # print(siptrunk)
             print(f"exporting: {siptrunk.name}: {siptrunk.description}")
@@ -209,8 +218,9 @@ def export_phone_registrations(ucm_axl, ucm_ris):
     reg = {}
     for phone in phones:
         all_phones.append(phone.name)
-    limit = lambda all_phones, n=1000: [
-        all_phones[i : i + n] for i in range(0, len(all_phones), n)
+
+    def limit(all_phones, n=1000): return [
+        all_phones[i: i + n] for i in range(0, len(all_phones), n)
     ]
     groups = limit(all_phones)
     for group in groups:
@@ -220,8 +230,7 @@ def export_phone_registrations(ucm_axl, ucm_ris):
         else:
             reg["user"] = registered["LoginUserId"]
             reg["regtime"] = time.strftime(
-                "%Y-%m-%d %H:%M:%S", time.localtime(registered["TimeStamp"])
-            )
+                "%Y-%m-%d %H:%M:%S", time.localtime(registered["TimeStamp"]))
             for item in registered["IPAddress"]:
                 reg["ip"] = item[1][0]["IP"]
             for item in registered["LinesStatus"]:
@@ -246,20 +255,13 @@ def export_translations(ucm_axl):
             xlate["routePartition"] = translation.routePartitionName._value_1
             xlate["description"] = translation.description
             xlate["callingSearchSpace"] = translation.callingSearchSpaceName._value_1
-            xlate[
-                "calledPartyTransformationMask"
-            ] = translation.calledPartyTransformationMask
-            xlate[
-                "callingPartyTransformationMask"
-            ] = translation.callingPartyTransformationMask
-            xlate[
-                "digitDiscardInstructionName"
-            ] = translation.digitDiscardInstructionName._value_1
+            xlate["calledPartyTransformationMask"] = translation.calledPartyTransformationMask
+            xlate["callingPartyTransformationMask"] = translation.callingPartyTransformationMask
+            xlate["digitDiscardInstructionName"] = translation.digitDiscardInstructionName._value_1
             xlate["prefixDigitsOut"] = translation.prefixDigitsOut
             all_translations.append(xlate)
             print(
-                f"exporting: {xlate['pattern']}: {xlate['routePartition']} - {xlate['description']} --> {xlate['calledPartyTransformationMask']}"
-            )
+                f"exporting: {xlate['pattern']}: {xlate['routePartition']} - {xlate['description']} --> {xlate['calledPartyTransformationMask']}")
         print("-" * 35)
         print(f"number of translations: {len(all_translations)}")
         return all_translations
