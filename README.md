@@ -1,10 +1,14 @@
-# CUCM Export command line utility
+# CUCM Exporter utility
 
 This tool was created in an effort to make exporting information from Cisco Unified Communications Manager (CUCM) easy. Some example use cases might include regularly exporting a user and phone number list to csv on a recurring schedule.
 
 - download [latest release](https://github.com/bradh11/cucm-exporter/releases/latest)
 
 ## Usage
+
+Now supporting full GUI via the amazing gooey python library. simply run the cucm-exporter without any following cli arguments. You can now run as a GUI or a CLI!
+
+![](img/cucm-exporter-screenshot1.png?raw=true)
 
 This tool will be packaged as a standalone executable file that can be used with syntax as seen below:
 
