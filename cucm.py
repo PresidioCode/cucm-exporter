@@ -1,4 +1,5 @@
 import time
+import json
 
 
 def export_users(ucm_axl):
@@ -145,6 +146,17 @@ def export_phones(ucm_axl):
                 "alwaysUsePrimeLine": phone.alwaysUsePrimeLine,
                 "alwaysUsePrimeLineForVoiceMessage": phone.alwaysUsePrimeLineForVoiceMessage,
             }
+            line_details = ucm_axl.get_phone(name=phone.name)
+            # print(line_details.lines.line)
+            try:
+                for line in line_details.lines.line:
+                    # print(line)
+                    phone_details[f"line_{line.index}_dirn"] = line.dirn.pattern
+                    phone_details[f"line_{line.index}_routePartitionName"] = line.dirn.routePartitionName._value_1
+                    phone_details[f"line_{line.index}_display"] = line.display
+                    phone_details[f"line_{line.index}_e164Mask"] = line.e164Mask
+            except Exception as e:
+                print(e)
             all_phones.append(phone_details)
 
             print(
