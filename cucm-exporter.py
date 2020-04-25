@@ -1,6 +1,7 @@
 import csv
 import json
 import sys
+import os
 from pathlib import Path
 from datetime import datetime
 from ciscoaxl import axl
@@ -16,7 +17,27 @@ IMG_DIR = BASE_DIR.joinpath("img")
 start_time = datetime.now()
 print(f"status: starting {start_time}")
 
-# GUI if no cli args, otherwise default to cli
+
+class Unbuffered(object):
+    # GOOEY config -> ensure unbuffered output mode
+    def __init__(self, stream):
+        self.stream = stream
+
+    def write(self, data):
+        self.stream.write(data)
+        self.stream.flush()
+
+    def writelines(self, datas):
+        self.stream.writelines(datas)
+        self.stream.flush()
+
+    def __getattr__(self, attr):
+        return getattr(self.stream, attr)
+
+
+sys.stdout = Unbuffered(sys.stdout)
+
+# GOOEY config -> GUI if no cli args, otherwise default to cli
 if len(sys.argv) >= 2:
     if not "--ignore-gooey" in sys.argv:
         sys.argv.append("--ignore-gooey")
