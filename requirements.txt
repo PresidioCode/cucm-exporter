@@ -1,3 +1,4 @@
 ciscoaxl
 ciscoris
+wxPython==4.0.7.post2
 gooey
