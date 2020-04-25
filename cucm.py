@@ -267,10 +267,10 @@ def export_translations(ucm_axl):
             xlate["routePartition"] = translation.routePartitionName._value_1
             xlate["description"] = translation.description
             xlate["callingSearchSpace"] = translation.callingSearchSpaceName._value_1
-            xlate["calledPartyTransformationMask"] = translation.calledPartyTransformationMask
             xlate["callingPartyTransformationMask"] = translation.callingPartyTransformationMask
             xlate["digitDiscardInstructionName"] = translation.digitDiscardInstructionName._value_1
             xlate["prefixDigitsOut"] = translation.prefixDigitsOut
+            xlate["calledPartyTransformationMask"] = translation.calledPartyTransformationMask
             all_translations.append(xlate)
             print(
                 f"exporting: {xlate['pattern']}: {xlate['routePartition']} - {xlate['description']} --> {xlate['calledPartyTransformationMask']}")
