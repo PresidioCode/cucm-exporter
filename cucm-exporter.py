@@ -228,12 +228,13 @@ def main():
         cucm=cucm_address,
         cucm_version=cucm_version,
     )
-    ucm_ris = ris(
-        username=cucm_username,
-        password=cucm_password,
-        cucm=cucm_address,
-        cucm_version=cucm_version,
-    )
+    # TODO: Add RIS connection as separate credentials
+    # ucm_ris = ris(
+    #     username=cucm_username,
+    #     password=cucm_password,
+    #     cucm=cucm_address,
+    #     cucm_version=cucm_version,
+    # )
 
     if cli_args.cucm_export == "users":
         output = cucm.export_users(ucm_axl)
