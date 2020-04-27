@@ -43,17 +43,20 @@ if len(sys.argv) >= 2:
         sys.argv.append("--ignore-gooey")
 
 
-def get_longest_dict_for_headers(content):
+def get_fieldnames(content):
     """
     Return the longest Dict Item for csv header writing
     """
     item_length = 0
+    csv_header = []
     for item in content:
-        if len(item) > item_length:
+        if len(item) >= item_length:
             longest_item = item
             item_length = len(item)
-
-    return longest_item
+            for key in longest_item.keys():
+                if key not in csv_header:
+                    csv_header.append(key)
+    return csv_header
 
 
 def output_filename(filename, cli_args):
@@ -77,8 +80,7 @@ def write_csv(filename, cli_args, content):
     """
     filename = output_filename(filename, cli_args)
     with open(filename, "w", newline="") as csvfile:
-        longest_item = get_longest_dict_for_headers(content)
-        fieldnames = [key for key in longest_item.keys()]
+        fieldnames = get_fieldnames(content)
 
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
