@@ -79,7 +79,7 @@ def write_csv(filename, cli_args, content):
     write output to csv file
     """
     filename = output_filename(filename, cli_args)
-    with open(filename, "w", newline="") as csvfile:
+    with open(filename, "w", newline="", encoding="utf-8") as csvfile:
         fieldnames = get_fieldnames(content)
 
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
