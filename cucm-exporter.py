@@ -86,6 +86,7 @@ def write_csv(filename, cli_args, content):
         writer.writeheader()
         for each in content:
             writer.writerow(each)
+    return filename
 
 
 @Gooey(
@@ -241,28 +242,32 @@ def main():
     if cli_args.cucm_export == "users":
         output = cucm.export_users(ucm_axl)
         if len(output) > 0:
-            write_csv(filename=filename, cli_args=cli_args, content=output)
+            saved_file = write_csv(
+                filename=filename, cli_args=cli_args, content=output)
         else:
             print(f"status: no {cli_args.cucm_export} found...")
         print(f"status: elapsed time -- {datetime.now() - start_time}\n")
     elif cli_args.cucm_export == "phones":
         output = cucm.export_phones(ucm_axl)
         if len(output) > 0:
-            write_csv(filename=filename, cli_args=cli_args, content=output)
+            saved_file = write_csv(
+                filename=filename, cli_args=cli_args, content=output)
         else:
             print(f"status: no {cli_args.cucm_export} found...")
         print(f"status: elapsed time -- {datetime.now() - start_time}\n")
     elif cli_args.cucm_export == "translations":
         output = cucm.export_translations(ucm_axl)
         if len(output) > 0:
-            write_csv(filename=filename, cli_args=cli_args, content=output)
+            saved_file = write_csv(
+                filename=filename, cli_args=cli_args, content=output)
         else:
             print(f"status: no {cli_args.cucm_export} found...")
         print(f"status: elapsed time -- {datetime.now() - start_time}\n")
     elif cli_args.cucm_export == "sip-trunks":
         output = cucm.export_siptrunks(ucm_axl)
         if len(output) > 0:
-            write_csv(filename=filename, cli_args=cli_args, content=output)
+            saved_file = write_csv(
+                filename=filename, cli_args=cli_args, content=output)
         else:
             print(f"status: no {cli_args.cucm_export} found...")
         print(f"status: elapsed time -- {datetime.now() - start_time}\n")
@@ -275,10 +280,10 @@ def main():
         response = send_email(
             smtp_server=cli_args.smtpserver,
             send_to_email=cli_args.mailto,
-            fileToSend=filename,
+            fileToSend=saved_file,
         )
         print(
-            f"status: mail sent to {cli_args.mailto} via {cli_args.smtpserver} at {date_time}"
+            f"status: mail sent to {cli_args.mailto} via {cli_args.smtpserver} at {date_time} - {saved_file}"
         )
     elif cli_args.mailto and not cli_args.smtpserver:
         print(f"status: mail unable to send.  no smtp server was defined")
